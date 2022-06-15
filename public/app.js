@@ -39,8 +39,8 @@ auth.onAuthStateChanged(user => {
 
 const db = firebase.firestore();
 
-const createThing = document.getElementById('createThing');
-const thingsList = document.getElementById('thingsList');
+const createNote = document.getElementById('createNote');
+const notesList = document.getElementById('notesList');
 
 
 let thingsRef;
@@ -51,37 +51,48 @@ auth.onAuthStateChanged(user => {
     if (user) {
 
         // Database Reference
-        thingsRef = db.collection('things')
+        notesRef = db.collection('notes')
 
-        createThing.onclick = () => {
+        createNote.onclick = () => {
 
             const { serverTimestamp } = firebase.firestore.FieldValue;
 
-            thingsRef.add({
-                uid: user.uid,
-                name: faker.commerce.productName(),
-                createdAt: serverTimestamp()
+
+            // Get the data from the form once the user clicks the create note button
+            
+            notesRef.add({
+                author: user.uid,
+                createdAt: serverTimestamp(),
+                title: document.getElementById('noteTitle').value,
+                subject: document.getElementById('noteSubject').value,
+                content: document.getElementById('noteContent').value,
+                imageLink: document.getElementById('noteImageLink').value,
             });
         }
 
+        // Query and list all the notes, with their author and date created information on the firebase server in realtime
 
-        // Query
-        unsubscribe = thingsRef
-            .where('uid', '==', user.uid)
-            .orderBy('createdAt') // Requires a query
-            .onSnapshot(querySnapshot => {
-                
-                // Map results to an array of li elements
+        // Use Bulma to style the list of notes
 
-                const items = querySnapshot.docs.map(doc => {
-
-                    return `<li>${doc.data().name}</li>`
-
-                });
-
-                thingsList.innerHTML = items.join('');
-
+        unsubscribe = notesRef.onSnapshot(snapshot => {
+            notesList.innerHTML = '';
+            snapshot.docs.forEach(doc => {
+                const note = doc.data();
+                notesList.innerHTML += `
+                    <div class="columns">
+                        <div class="column">
+                            <h3>${note.title}</h3>
+                            <p>${note.subject}</p>
+                            <p>${note.content}</p>
+                            <p>${note.imageLink}</p>
+                        </div>
+                    </div>
+                `;
             });
+        }
+        );
+
+
 
 
 
