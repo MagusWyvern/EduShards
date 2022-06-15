@@ -1,0 +1,23 @@
+{
+  "name": "edushards",
+  "version": "1.0.0",
+  "description": "Note taking app for students",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MagusWyvern/EduShards.git"
+  },
+  "keywords": [
+    "js",
+    "firebase"
+  ],
+  "author": "MagusWyvern",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MagusWyvern/EduShards/issues"
+  },
+  "homepage": "https://github.com/MagusWyvern/EduShards#readme"
+}
